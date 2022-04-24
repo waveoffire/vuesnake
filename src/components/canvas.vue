@@ -11,9 +11,10 @@ export default Vue.extend({
   data() {
     return {
       kierunek: 2,
-      snakeX: 0,
-      snakeY: 0,
-      snakeWidth: 3,
+      snakeCoords: [{ x: 0, y: 0 }],
+      snakeWidth: 1,
+      rand1: 0,
+      rand2: 0,
     };
   },
 
@@ -37,22 +38,71 @@ export default Vue.extend({
 
       ctx.fillStyle = "green";
       this.move(ctx);
+      this.drawberry(ctx);
+    },
+    drawberry(ctx) {
+      this.rand1 = Math.floor(Math.random() * 25);
+      this.rand2 = Math.floor(Math.random() * 25);
+      ctx.fillStyle = "red";
+      ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
+    },
+    drawsnake(ctx) {
+      ctx.fillStyle = "green";
+      for (let i = 0; i <= this.snakeWidth - 1; i++) {
+        ctx.fillRect(this.snakeCoords[i].x, this.snakeCoords[i].y, 20, 20);
+      }
+
+      /*  for (let i = 0; i <= this.snakeWidth - 1; i++) {
+        if (this.snakeCoords.length <= this.snakeWidth - 1) {
+          this.snakeCoords.push({ x: 0, y: 0 });
+          console.log("1:" + i);
+        }
+      }
+      for (let i = 0; i <= this.snakeWidth - 1; i++) {
+        if (i > 0) {
+          this.snakeCoords[i].x = this.snakeCoords[i - 1].x;
+          this.snakeCoords[i].y = this.snakeCoords[i - 1].y;
+          console.log("2:" + i);
+        }
+      }
+      for (let i = 0; i <= this.snakeWidth - 1; i++) {
+        ctx.fillRect(this.snakeCoords[i].x, this.snakeCoords[i].y, 20, 20);
+        console.log("3:" + i);
+      } */
     },
     move(ctx) {
       var inter = setInterval(() => {
         ctx.clearRect(0, 0, 500, 500);
         this.createbackground(ctx);
-        for (let i = 0; i <= this.snakeWidth; i++) {
-          ctx.fillRect(this.snakeX, this.snakeY - 20 * i, 20, 20);
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
+        this.drawsnake(ctx);
+        for (let i = 1; i <= this.snakeWidth - 1; i++) {
+          this.snakeCoords[i].x = this.snakeCoords[i - 1].x;
+          this.snakeCoords[i].y = this.snakeCoords[i - 1].y;
+          console.log("2:" + i);
         }
+
         if (this.kierunek == 1) {
-          this.snakeY -= 20;
+          this.snakeCoords[0].y -= 20;
         } else if (this.kierunek == 2) {
-          this.snakeY += 20;
+          this.snakeCoords[0].y += 20;
         } else if (this.kierunek == 3) {
-          this.snakeX -= 20;
+          this.snakeCoords[0].x -= 20;
         } else if (this.kierunek == 4) {
-          this.snakeX += 20;
+          this.snakeCoords[0].x += 20;
+        }
+
+        if (
+          this.snakeCoords[0].x == this.rand1 * 20 &&
+          this.snakeCoords[0].y == this.rand2 * 20
+        ) {
+          this.snakeWidth++;
+          this.drawberry(ctx);
+          this.snakeCoords.push({
+            x: this.snakeCoords[this.snakeCoords.length - 1].x,
+            y: this.snakeCoords[this.snakeCoords.length - 1].y,
+          });
         }
       }, 200);
     },
