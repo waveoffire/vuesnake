@@ -1,20 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <canvas-app />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
-
-@Component({
+import Vue from "vue";
+import Canvas from "./components/canvas.vue";
+export default Vue.extend({
   components: {
-    HelloWorld,
+    CanvasApp: Canvas,
   },
-})
-export default class App extends Vue {}
+  name: "APP",
+  data() {
+    return {};
+  },
+  methods: {},
+});
 </script>
 
 <style lang="scss">
