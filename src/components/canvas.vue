@@ -77,10 +77,10 @@ export default Vue.extend({
         ctx.fillStyle = "red";
         ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
         this.drawsnake(ctx);
-        for (let i = 1; i <= this.snakeWidth - 1; i++) {
+        for (let i = this.snakeWidth - 1; i >= 1; i--) {
           this.snakeCoords[i].x = this.snakeCoords[i - 1].x;
           this.snakeCoords[i].y = this.snakeCoords[i - 1].y;
-          console.log("2:" + i);
+          //console.log("2:" + i);
         }
 
         if (this.kierunek == 1) {
