@@ -27,7 +27,7 @@ export default Vue.extend({
   },
 
   methods: {
-    createbackground(ctx) {
+    createbackground(ctx:CanvasRenderingContext2D) {
       ctx.strokeStyle = "rgba(0,0,0,0.3)";
       this.Dirt_image.src = 'img/Dirt.png';
       for (let i = 0; i <= 500; i += 20) {
@@ -41,16 +41,18 @@ export default Vue.extend({
     init() {
       console.log("init");
       this.keyEventHandler();
-      var canvas = document.getElementById("mainCanv");
+      var canvas:HTMLCanvasElement = document.getElementById("mainCanv") as
+                 HTMLCanvasElement;
 
-      var ctx = canvas.getContext("2d");
+      var ctx:CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D;
       this.createbackground(ctx);
 
       ctx.fillStyle = "green";
       this.move(ctx);
+      
       this.drawberry(ctx);
     },
-    drawberry(ctx) {
+    drawberry(ctx:CanvasRenderingContext2D) {
      
     this.apple_image.src = 'img/Apple.png';
     
@@ -70,7 +72,7 @@ export default Vue.extend({
       //ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
       ctx.drawImage(this.apple_image, this.rand1 * 20, this.rand2 * 20);
     },
-    drawImageRot(img,x,y,width,height,deg,ctx){
+    drawImageRot(img:HTMLImageElement,x:number,y:number,width:number,height:number,deg:number,ctx:CanvasRenderingContext2D){
     // Store the current context state (i.e. rotation, translation etc..)
     ctx.save()
 
@@ -89,7 +91,7 @@ export default Vue.extend({
     // Restore canvas state as saved from above
     ctx.restore();
 },
-    drawsnake(ctx) {
+    drawsnake(ctx:CanvasRenderingContext2D) {
       this.SnakeHead_image.src = 'img/SnakeHead.png';
       this.SnakeBody_image.src = 'img/Snake_Body.png';
       this.SnakeTail_image.src='img/Snake_Tail.png';
@@ -139,7 +141,7 @@ export default Vue.extend({
         console.log("3:" + i);
       } */
     },
-    move(ctx) {
+    move(ctx:CanvasRenderingContext2D) {
       var inter = setInterval(() => {
         ctx.clearRect(0, 0, 500, 500);
         this.createbackground(ctx);
