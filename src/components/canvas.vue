@@ -1,6 +1,8 @@
 <template>
   <div>
     <canvas id="mainCanv" width="500" height="500"></canvas>
+   <div>Wynik: {{snakeWidth-1}}</div>
+  <div v-if="gameover"> Game over</div>
   </div>
 </template>
 
@@ -15,6 +17,9 @@ export default Vue.extend({
       snakeWidth: 1,
       rand1: 0,
       rand2: 0,
+      gameover:false,
+      apple_image: new Image(),
+      SnakeHead_image: new Image()
     };
   },
 
@@ -41,15 +46,65 @@ export default Vue.extend({
       this.drawberry(ctx);
     },
     drawberry(ctx) {
+     
+    this.apple_image.src = 'img/Apple.png';
+    
       this.rand1 = Math.floor(Math.random() * 25);
       this.rand2 = Math.floor(Math.random() * 25);
+        for(let i =0;this.snakeCoords.length>i;i++){
+         if (
+          this.rand1 * 20== this.snakeCoords[i].x &&
+         this.rand2 * 20== this.snakeCoords[i].y
+        ){
+          this.drawberry(ctx)
+        }
+      }
+
       ctx.fillStyle = "red";
-      ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
+      
+      //ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
+      ctx.drawImage(this.apple_image, this.rand1 * 20, this.rand2 * 20);
     },
+    drawImageRot(img,x,y,width,height,deg,ctx){
+    // Store the current context state (i.e. rotation, translation etc..)
+    ctx.save()
+
+    //Convert degrees to radian 
+    var rad = deg * Math.PI / 180;
+
+    //Set the origin to the center of the image
+    ctx.translate(x + width / 2, y + height / 2);
+
+    //Rotate the canvas around the origin
+    ctx.rotate(rad);
+
+    //draw the image    
+    ctx.drawImage(img,width / 2 * (-1),height / 2 * (-1),width,height);
+
+    // Restore canvas state as saved from above
+    ctx.restore();
+},
     drawsnake(ctx) {
+      this.SnakeHead_image.src = 'img/SnakeHead.png';
       ctx.fillStyle = "green";
       for (let i = 0; i <= this.snakeWidth - 1; i++) {
-        ctx.fillRect(this.snakeCoords[i].x, this.snakeCoords[i].y, 20, 20);
+        if(i==0){
+        //ctx.drawImage(this.SnakeHead_image, this.snakeCoords[i].x, this.snakeCoords[i].y); 
+        let stopnie=0
+        if(this.kierunek==2){
+          stopnie = 180
+        } else if(this.kierunek==2){
+          stopnie = 90}
+          else if(this.kierunek==3){
+          stopnie =270}
+          else if(this.kierunek==4){
+          stopnie = 90}
+
+        
+        this.drawImageRot(this.SnakeHead_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,stopnie,ctx)
+        
+        }else{
+        ctx.fillRect(this.snakeCoords[i].x, this.snakeCoords[i].y, 20, 20);}
       }
 
       /*  for (let i = 0; i <= this.snakeWidth - 1; i++) {
@@ -75,7 +130,8 @@ export default Vue.extend({
         ctx.clearRect(0, 0, 500, 500);
         this.createbackground(ctx);
         ctx.fillStyle = "red";
-        ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
+        ctx.drawImage(this.apple_image, this.rand1 * 20, this.rand2 * 20);
+        //ctx.fillRect(this.rand1 * 20, this.rand2 * 20, 20, 20);
         this.drawsnake(ctx);
         for (let i = this.snakeWidth - 1; i >= 1; i--) {
           this.snakeCoords[i].x = this.snakeCoords[i - 1].x;
@@ -92,7 +148,18 @@ export default Vue.extend({
         } else if (this.kierunek == 4) {
           this.snakeCoords[0].x += 20;
         }
-
+      for(let i =1;this.snakeCoords.length>i;i++){
+         if (
+          this.snakeCoords[0].x == this.snakeCoords[i].x &&
+          this.snakeCoords[0].y == this.snakeCoords[i].y
+        ){
+          this.gameover=true;
+        }
+      }
+      
+      if(this.snakeCoords[0].x<0||this.snakeCoords[0].x>500||this.snakeCoords[0].y<0||this.snakeCoords[0].y>500){
+         this.gameover=true;
+      }
         if (
           this.snakeCoords[0].x == this.rand1 * 20 &&
           this.snakeCoords[0].y == this.rand2 * 20
@@ -104,7 +171,7 @@ export default Vue.extend({
             y: this.snakeCoords[this.snakeCoords.length - 1].y,
           });
         }
-      }, 200);
+      }, 100);
     },
     keyEventHandler() {
       document.addEventListener(
