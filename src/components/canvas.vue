@@ -23,6 +23,8 @@ export default Vue.extend({
       SnakeBody_image: new Image(),
       Dirt_image: new Image(),
       SnakeTail_image: new Image(),
+      SnakeLeft_image: new Image(),
+      SnakeRight_image: new Image(),
     };
   },
 
@@ -40,6 +42,13 @@ export default Vue.extend({
     },
     init() {
       console.log("init");
+            this.SnakeHead_image.src = 'img/SnakeHead.png';
+      this.SnakeBody_image.src = 'img/Snake_Body.png';
+      this.SnakeTail_image.src='img/Snake_Tail.png';
+      this.SnakeLeft_image.src='img/left-body.png';
+      this.SnakeRight_image.src='img/right-body.png';
+          this.apple_image.src = 'img/Apple.png';
+
       this.keyEventHandler();
       var canvas:HTMLCanvasElement = document.getElementById("mainCanv") as
                  HTMLCanvasElement;
@@ -54,7 +63,6 @@ export default Vue.extend({
     },
     drawberry(ctx:CanvasRenderingContext2D) {
      
-    this.apple_image.src = 'img/Apple.png';
     
       this.rand1 = Math.floor(Math.random() * 25);
       this.rand2 = Math.floor(Math.random() * 25);
@@ -92,13 +100,12 @@ export default Vue.extend({
     ctx.restore();
 },
     drawsnake(ctx:CanvasRenderingContext2D) {
-      this.SnakeHead_image.src = 'img/SnakeHead.png';
-      this.SnakeBody_image.src = 'img/Snake_Body.png';
-      this.SnakeTail_image.src='img/Snake_Tail.png';
+
+
 
       ctx.fillStyle = "green";
       for (let i = 0; i <= this.snakeWidth - 1; i++) {
-        if(i==0){
+        
         //ctx.drawImage(this.SnakeHead_image, this.snakeCoords[i].x, this.snakeCoords[i].y); 
         let stopnie=0
         if(this.kierunek==2){
@@ -109,18 +116,41 @@ export default Vue.extend({
           this.snakeCoords[0].r = 270}
           else if(this.kierunek==4){
           this.snakeCoords[0].r =  90}
-
+      if(i==0){
         
         this.drawImageRot(this.SnakeHead_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,this.snakeCoords[i].r,ctx);
         
         }else if(i==this.snakeWidth-1){
          this.drawImageRot(this.SnakeTail_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,this.snakeCoords[i].r,ctx)
-
+        
         }
         else{
-         this.drawImageRot(this.SnakeBody_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,this.snakeCoords[i].r,ctx)
+                if(this.snakeWidth>1&&this.snakeWidth-1!=i){
+                  if(this.snakeCoords[i].r!=this.snakeCoords[i+1].r){
+                    let r =0
+                     if(this.snakeCoords[i+1].r==180){
+                      r = 270
+                     } else if(this.snakeCoords[i+1].r==0){
+                      r =  180}
+                      else if(this.snakeCoords[i+1].r==270){
+                      r = 0}
+                       else if(this.snakeCoords[i+1].r==90){
+                      r =  90}
+
+                     if(this.snakeCoords[i].r!>this.snakeCoords[i+1].r){
+                        this.drawImageRot(this.SnakeLeft_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,r,ctx)
+                    }else{
+                         this.drawImageRot(this.SnakeRight_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,r,ctx)
+
+}
+                  }else{
+                   this.drawImageRot(this.SnakeBody_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,this.snakeCoords[i].r,ctx)
 
         }
+        
+        }
+        }
+
       }
 
       /*  for (let i = 0; i <= this.snakeWidth - 1; i++) {
