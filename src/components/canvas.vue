@@ -13,23 +13,28 @@ export default Vue.extend({
   data() {
     return {
       kierunek: 2,
-      snakeCoords: [{ x: 0, y: 0 }],
+      snakeCoords: [{ x: 0, y: 0,r:0 }],
       snakeWidth: 1,
       rand1: 0,
       rand2: 0,
       gameover:false,
       apple_image: new Image(),
-      SnakeHead_image: new Image()
+      SnakeHead_image: new Image(),
+      SnakeBody_image: new Image(),
+      Dirt_image: new Image(),
+      SnakeTail_image: new Image(),
     };
   },
 
   methods: {
     createbackground(ctx) {
       ctx.strokeStyle = "rgba(0,0,0,0.3)";
-
+      this.Dirt_image.src = 'img/Dirt.png';
       for (let i = 0; i <= 500; i += 20) {
         for (let j = 0; j <= 500; j += 20) {
-          ctx.strokeRect(i, j, 20, 20);
+          
+           ctx.drawImage(this.Dirt_image, i, j);
+           //ctx.strokeRect(i, j, 20, 20);
         }
       }
     },
@@ -86,25 +91,34 @@ export default Vue.extend({
 },
     drawsnake(ctx) {
       this.SnakeHead_image.src = 'img/SnakeHead.png';
+      this.SnakeBody_image.src = 'img/Snake_Body.png';
+      this.SnakeTail_image.src='img/Snake_Tail.png';
+
       ctx.fillStyle = "green";
       for (let i = 0; i <= this.snakeWidth - 1; i++) {
         if(i==0){
         //ctx.drawImage(this.SnakeHead_image, this.snakeCoords[i].x, this.snakeCoords[i].y); 
         let stopnie=0
         if(this.kierunek==2){
-          stopnie = 180
-        } else if(this.kierunek==2){
-          stopnie = 90}
+          this.snakeCoords[0].r = 180
+        } else if(this.kierunek==1){
+          this.snakeCoords[0].r =  0}
           else if(this.kierunek==3){
-          stopnie =270}
+          this.snakeCoords[0].r = 270}
           else if(this.kierunek==4){
-          stopnie = 90}
+          this.snakeCoords[0].r =  90}
 
         
-        this.drawImageRot(this.SnakeHead_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,stopnie,ctx)
+        this.drawImageRot(this.SnakeHead_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,this.snakeCoords[i].r,ctx);
         
-        }else{
-        ctx.fillRect(this.snakeCoords[i].x, this.snakeCoords[i].y, 20, 20);}
+        }else if(i==this.snakeWidth-1){
+         this.drawImageRot(this.SnakeTail_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,this.snakeCoords[i].r,ctx)
+
+        }
+        else{
+         this.drawImageRot(this.SnakeBody_image,this.snakeCoords[i].x, this.snakeCoords[i].y,20,20,this.snakeCoords[i].r,ctx)
+
+        }
       }
 
       /*  for (let i = 0; i <= this.snakeWidth - 1; i++) {
@@ -136,6 +150,7 @@ export default Vue.extend({
         for (let i = this.snakeWidth - 1; i >= 1; i--) {
           this.snakeCoords[i].x = this.snakeCoords[i - 1].x;
           this.snakeCoords[i].y = this.snakeCoords[i - 1].y;
+          this.snakeCoords[i].r = this.snakeCoords[i - 1].r;
           //console.log("2:" + i);
         }
 
@@ -169,6 +184,7 @@ export default Vue.extend({
           this.snakeCoords.push({
             x: this.snakeCoords[this.snakeCoords.length - 1].x,
             y: this.snakeCoords[this.snakeCoords.length - 1].y,
+            r: this.snakeCoords[this.snakeCoords.length - 1].r,
           });
         }
       }, 100);
