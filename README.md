@@ -1,7 +1,9 @@
 # vuesnake
 Prosta gra Snake w JavaScript w frameworku vue.js
-Live: http://snake.smilgin.eu
-Sterowanie: strzałki
+### Live:
+http://snake.smilgin.eu
+### Sterowanie: 
+strzałki
 ## Project setup
 ```
 yarn install
