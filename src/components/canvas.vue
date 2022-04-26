@@ -172,7 +172,7 @@ export default Vue.extend({
         }
       }
       
-      if(this.snakeCoords[0].x<0||this.snakeCoords[0].x>500||this.snakeCoords[0].y<0||this.snakeCoords[0].y>500){
+      if(this.snakeCoords[0].x<0||this.snakeCoords[0].x>=500||this.snakeCoords[0].y<0||this.snakeCoords[0].y>=500){
          this.gameover=true;
       }
         if (
@@ -187,7 +187,10 @@ export default Vue.extend({
             r: this.snakeCoords[this.snakeCoords.length - 1].r,
           });
         }
-      }, 100);
+        if(this.gameover==true){
+          clearInterval(inter)
+        }
+      }, 140);
     },
     keyEventHandler() {
       document.addEventListener(
@@ -198,13 +201,13 @@ export default Vue.extend({
           // Alert the key name and key code on keydown
           console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
 
-          if (code == "ArrowUp") {
+          if (code == "ArrowUp" && this.kierunek!=2) {
             this.kierunek = 1;
-          } else if (code == "ArrowDown") {
+          } else if (code == "ArrowDown"&& this.kierunek!=1) {
             this.kierunek = 2;
-          } else if (code == "ArrowLeft") {
+          } else if (code == "ArrowLeft"&& this.kierunek!=4) {
             this.kierunek = 3;
-          } else if (code == "ArrowRight") {
+          } else if (code == "ArrowRight"&& this.kierunek!=3) {
             this.kierunek = 4;
           }
         },
@@ -222,5 +225,7 @@ export default Vue.extend({
 <style scoped lang="scss">
 #mainCanv {
   border: 1px solid black;
+  width: auto;
+  height: 80vh;
 }
 </style>
