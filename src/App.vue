@@ -7,6 +7,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Canvas from "./components/canvas.vue";
+
 export default Vue.extend({
   components: {
     CanvasApp: Canvas,

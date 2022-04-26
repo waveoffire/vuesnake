@@ -2,14 +2,19 @@
   <div>
     <canvas id="mainCanv" width="500" height="500"></canvas>
     <div>Wynik: {{ snakeWidth - 1 }}</div>
-    <div v-if="gameover">Game over</div>
+
+    <game-over-app :gameover="gameover" :score="snakeWidth - 1" />
   </div>
 </template>
 
 <script lang="ts">
+import GameOver from "./gameover.vue";
 import Vue from "vue";
 export default Vue.extend({
   name: "CanvasApp",
+  components: {
+    GameOverApp: GameOver,
+  },
   data() {
     return {
       kierunek: 2,
