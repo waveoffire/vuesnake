@@ -1,5 +1,7 @@
 # vuesnake
+Prosta gra Snake w JavaScript w frameworku vue.js
 
+Sterowanie: strzałki
 ## Project setup
 ```
 yarn install
